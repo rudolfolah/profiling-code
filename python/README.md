@@ -29,3 +29,9 @@ $ memray run program.py
 $ memray flamegraph memray-program.py.*.bin
 $ open memray-flamegraph-program.py.*.html
 ```
+
+### psutil
+
+```
+$ python run_psutil.py
+```
