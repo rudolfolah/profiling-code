@@ -12,6 +12,20 @@ pip install -r requirements.txt
 
 ## Run
 
-```bash
-python -m cProfile -o profile.out main.py
+### cProfile
+
+```
+$ python -m cProfile -o profile.out program.py
+
+$ python -m pstats profile.out
+profile.out% sort cumulative
+profile.out% stats 10
+```
+
+### Memray
+
+```
+$ memray run program.py
+$ memray flamegraph memray-program.py.*.bin
+$ open memray-flamegraph-program.py.*.html
 ```
