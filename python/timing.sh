@@ -13,3 +13,5 @@ echo 'Running memray'
 time memray run program.py > /dev/null
 echo 'Running pyinstrument'
 time pyinstrument program.py > /dev/null
+echo 'Running cProfile'
+time python -m cProfile -o profile.out program.py > /dev/null
