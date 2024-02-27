@@ -11,3 +11,5 @@ run run_guppy3.py
 run run_psutil.py
 echo 'Running memray'
 time memray run program.py > /dev/null
+echo 'Running pyinstrument'
+time pyinstrument program.py > /dev/null

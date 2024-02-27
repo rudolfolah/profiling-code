@@ -26,6 +26,7 @@ Here are the results of the timing from one run:
 | guppy3       | 0m0.525s  | 0m0.343s  | 0m0.018s    |
 | psutil       | 0m0.349s  | 0m0.149s  | 0m0.016s    |
 | memray       | 0m0.686s  | 0m0.360s  | 0m0.065s    |
+| pyinstrument | 0m0.496s  | 0m0.310s  | 0m0.024s    |
 
 ### [cProfile](https://docs.python.org/3/library/profile.html#module-cProfile)
 
