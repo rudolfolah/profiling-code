@@ -39,6 +39,34 @@ profile.out% sort cumulative
 profile.out% stats 10
 ```
 
+<details>
+<summary>Output</summary>
+
+```
+Welcome to the profile statistics browser.
+profile.out% sort cumulative
+profile.out% stats 10
+Mon Feb 26 23:51:19 2024    profile.out
+
+         658389 function calls (640523 primitive calls) in 0.484 seconds
+
+   Ordered by: cumulative time
+   List reduced from 1926 to 10 due to restriction <10>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+    151/1    0.001    0.000    0.484    0.484 {built-in method builtins.exec}
+        1    0.000    0.000    0.484    0.484 program.py:1(<module>)
+        1    0.000    0.000    0.307    0.307 program.py:7(main)
+        1    0.000    0.000    0.180    0.180 /Users/rudolfo/Workspace/profiling-code/python/.venv/lib/python3.11/site-packages/requests/api.py:62(get)
+        1    0.000    0.000    0.180    0.180 /Users/rudolfo/Workspace/profiling-code/python/.venv/lib/python3.11/site-packages/requests/api.py:14(request)
+        1    0.000    0.000    0.180    0.180 /Users/rudolfo/Workspace/profiling-code/python/.venv/lib/python3.11/site-packages/requests/sessions.py:502(request)
+    202/4    0.001    0.000    0.178    0.044 <frozen importlib._bootstrap>:1165(_find_and_load)
+    201/4    0.000    0.000    0.178    0.044 <frozen importlib._bootstrap>:1120(_find_and_load_unlocked)
+    176/4    0.000    0.000    0.177    0.044 <frozen importlib._bootstrap>:666(_load_unlocked)
+    149/4    0.000    0.000    0.177    0.044 <frozen importlib._bootstrap_external>:934(exec_module)
+```
+</details>
+
 ### [Memray](https://bloomberg.github.io/memray/overview.html)
 
 ```
@@ -47,15 +75,70 @@ $ memray flamegraph memray-program.py.*.bin
 $ open memray-flamegraph-program.py.*.html
 ```
 
+<details>
+<summary>Output</summary>
+
+<img src="./images/memray-flamegraph.png" alt="Memray Flamegraph" width="100%">
+</details>
+
 ### [psutil](https://psutil.readthedocs.io/en/latest/)
 
 ```
 $ python run_psutil.py
 ```
 
+<details>
+<summary>Output</summary>
+
+```
+Initial
+pcputimes(user=0.089062752, system=0.022834584, children_user=0.0, children_system=0.0)
+pmem(rss=28999680, vms=418850439168, pfaults=2272, pageins=25)
+[('lunar', 21), ('lander', 17), ('Nova-C', 16), ('landing', 11), ('Intuitive', 10), ('with', 10), ('will', 10), ('NASA', 9), ('that', 9), ('Machines', 7)]
+After
+pcputimes(user=0.15308312, system=0.02816604, children_user=0.0, children_system=0.0)
+pmem(rss=38912000, vms=418856648704, pfaults=2897, pageins=25)
+```
+</details>
 
 ### [guppy3](https://github.com/zhuyifei1999/guppy3)
 
 ```
 $ python run_guppy3.py
 ```
+
+<details>
+<summary>Output</summary>
+
+```
+Initial
+Partition of a set of 109798 objects. Total size = 14652386 bytes.
+ Index  Count   %     Size   % Cumulative  % Kind (class / dict of class)
+     0  36699  33  3347979  23   3347979  23 str
+     1   6616   6  2501840  17   5849819  40 types.CodeType
+     2  22154  20  1597088  11   7446907  51 tuple
+     3   1143   1  1300488   9   8747395  60 type
+     4  13397  12  1224487   8   9971882  68 bytes
+     5   6174   6   938448   6  10910330  74 function
+     6   1190   1   728760   5  11639090  79 dict (no owner)
+     7   1143   1   406088   3  12045178  82 dict of type
+     8    270   0   314112   2  12359290  84 dict of module
+     9   6385   6   194024   1  12553314  86 int
+<314 more rows. Type e.g. '_.more' to view.>
+[('lunar', 21), ('lander', 17), ('Nova-C', 16), ('landing', 11), ('Intuitive', 10), ('with', 10), ('will', 10), ('NASA', 9), ('that', 9), ('Machines', 7)]
+After
+Partition of a set of 110443 objects. Total size = 14745125 bytes.
+ Index  Count   %     Size   % Cumulative  % Kind (class / dict of class)
+     0  36868  33  3360831  23   3360831  23 str
+     1   6648   6  2517608  17   5878439  40 types.CodeType
+     2  22276  20  1606368  11   7484807  51 tuple
+     3   1152   1  1314912   9   8799719  60 type
+     4  13460  12  1232402   8  10032121  68 bytes
+     5   6205   6   943160   6  10975281  74 function
+     6   1192   1   729808   5  11705089  79 dict (no owner)
+     7   1152   1   408288   3  12113377  82 dict of type
+     8    273   0   315872   2  12429249  84 dict of module
+     9   6403   6   194588   1  12623837  86 int
+<322 more rows. Type e.g. '_.more' to view.>
+```
+</details>
