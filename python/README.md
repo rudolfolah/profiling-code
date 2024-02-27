@@ -28,6 +28,7 @@ Here are the results of the timing from one run:
 | memray       | 0m0.686s  | 0m0.360s  | 0m0.065s    |
 | pyinstrument | 0m0.496s  | 0m0.310s  | 0m0.024s    |
 | cProfile     | 0m0.493s  | 0m0.307s  | 0m0.018s    |
+| tracemalloc  | 0m0.592s  | 0m0.432s  | 0m0.018s    |
 
 ### [cProfile](https://docs.python.org/3/library/profile.html#module-cProfile)
 
@@ -64,6 +65,31 @@ Mon Feb 26 23:51:19 2024    profile.out
     201/4    0.000    0.000    0.178    0.044 <frozen importlib._bootstrap>:1120(_find_and_load_unlocked)
     176/4    0.000    0.000    0.177    0.044 <frozen importlib._bootstrap>:666(_load_unlocked)
     149/4    0.000    0.000    0.177    0.044 <frozen importlib._bootstrap_external>:934(exec_module)
+```
+</details>
+
+### [tracemalloc](https://docs.python.org/3/library/tracemalloc.html)
+
+```
+$ python run_tracemalloc.py
+```
+
+<details>
+<summary>Output</summary>
+
+```
+[('lunar', 21), ('lander', 17), ('Nova-C', 16), ('landing', 11), ('Intuitive', 10), ('with', 10), ('will', 10), ('NASA', 9), ('that', 9), ('Machines', 7)]
+[ Top 10 differences ]
+/Users/rudolfo/Workspace/profiling-code/python/.venv/lib/python3.11/site-packages/bs4/__init__.py:749: size=988 KiB (+988 KiB), count=8219 (+8219), average=123 B
+/Users/rudolfo/Workspace/profiling-code/python/.venv/lib/python3.11/site-packages/bs4/element.py:175: size=966 KiB (+966 KiB), count=5888 (+5888), average=168 B
+/Users/rudolfo/Workspace/profiling-code/python/.venv/lib/python3.11/site-packages/bs4/element.py:952: size=393 KiB (+393 KiB), count=5890 (+5890), average=68 B
+/Users/rudolfo/.pyenv/versions/3.11.5/lib/python3.11/html/parser.py:323: size=235 KiB (+235 KiB), count=3379 (+3379), average=71 B
+/Users/rudolfo/.pyenv/versions/3.11.5/lib/python3.11/html/parser.py:326: size=204 KiB (+204 KiB), count=3893 (+3893), average=54 B
+/Users/rudolfo/Workspace/profiling-code/python/.venv/lib/python3.11/site-packages/bs4/element.py:1252: size=193 KiB (+193 KiB), count=3081 (+3081), average=64 B
+/Users/rudolfo/Workspace/profiling-code/python/.venv/lib/python3.11/site-packages/bs4/builder/__init__.py:321: size=169 KiB (+169 KiB), count=3529 (+3529), average=49 B
+/Users/rudolfo/Workspace/profiling-code/python/.venv/lib/python3.11/site-packages/bs4/element.py:1276: size=168 KiB (+168 KiB), count=3080 (+3080), average=56 B
+/Users/rudolfo/.pyenv/versions/3.11.5/lib/python3.11/html/parser.py:313: size=154 KiB (+154 KiB), count=3082 (+3082), average=51 B
+/Users/rudolfo/Workspace/profiling-code/python/.venv/lib/python3.11/site-packages/bs4/builder/_htmlparser.py:115: size=132 KiB (+132 KiB), count=2119 (+2119), average=64 B
 ```
 </details>
 
