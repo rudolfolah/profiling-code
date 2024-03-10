@@ -1,6 +1,6 @@
 # profiling-code
 
-Collection of examples that uses different profiling tools to show memory usage and timings.
+Collection of examples and links that uses different profiling tools to show memory usage and timings.
 
 Shows how to use the profiler and what the output looks like. Includes only tools that are maintained.
 
