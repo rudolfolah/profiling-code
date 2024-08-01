@@ -865,3 +865,15 @@ name           id     tid              ttot      scnt
 _MainThread    0      7947849728       0.733769  1         
 ```
 </details>
+
+### [filprofiler](https://github.com/pythonspeed/filprofiler)
+
+```
+$ fil-profile run program.py
+$ python -m filprofiler run program.py
+```
+
+<details>
+<summary>Output</summary>
+
+</details>
