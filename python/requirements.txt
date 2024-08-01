@@ -4,6 +4,7 @@ psutil==5.9.8
 pyinstrument==4.6.2
 py-spy==0.3.14
 yappi==1.6.0
+filprofiler==2023.3.1
 
 # for the main program
 requests==2.32.2
