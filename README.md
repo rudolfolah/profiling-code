@@ -12,3 +12,4 @@ Shows how to use the profiler and what the output looks like. Includes only tool
 * ["Flame Graphs", Brendan Gregg](https://www.brendangregg.com/flamegraphs.html)
 * ["Sampling v. tracing", Dan Luu](https://danluu.com/perf-tracing/)
 * [Memory and CPU profiling, "The Hacker's Guide to Scaling Python", Julien Danjou](https://www.educative.io/courses/hackers-guide-scaling-python/memory-and-cpu-profiling)
+* [Python 3.12 support for the Linux perf profiler](https://docs.python.org/3/howto/perf_profiling.html)
