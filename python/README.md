@@ -34,6 +34,7 @@ Here are the results of the timing from one run:
 | cProfile     | 0m0.493s  | 0m0.307s  | 0m0.018s    |
 | tracemalloc  | 0m0.592s  | 0m0.432s  | 0m0.018s    |
 | yappi        | 0m0.965s  | 0m0.435s  | 0m0.392s    |
+| filprofiler  | 0m2.414s  | 0m2.135s  | 0m0.128s    |
 
 ### [cProfile](https://docs.python.org/3/library/profile.html#module-cProfile)
 
@@ -864,4 +865,17 @@ Memory usage 362616
 name           id     tid              ttot      scnt        
 _MainThread    0      7947849728       0.733769  1         
 ```
+</details>
+
+### [filprofiler](https://github.com/pythonspeed/filprofiler)
+
+```
+$ fil-profile run program.py
+$ python -m filprofiler run program.py
+```
+
+<details>
+<summary>Output</summary>
+
+<img src="./images/filprofiler-flamegraph.png" alt="Memray Flamegraph" width="100%">
 </details>

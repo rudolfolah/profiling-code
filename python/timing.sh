@@ -17,3 +17,7 @@ echo 'Running cProfile'
 time python -m cProfile -o profile.out program.py > /dev/null
 run run_tracemalloc.py
 run run_yappi.py
+echo 'Running filprofiler'
+time fil-profile --no-browser run program.py > /dev/null
+
+deactivate
