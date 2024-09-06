@@ -879,3 +879,54 @@ $ python -m filprofiler run program.py
 
 <img src="./images/filprofiler-flamegraph.png" alt="Memray Flamegraph" width="100%">
 </details>
+
+### [DTrace](https://docs.python.org/3/howto/instrumentation.html)
+
+**This requires building Python with `--with-dtrace` option.** This is not enabled by default and you will need to compile Python from source, this applies to Docker images as well.
+
+If you're using `pyenv` you can do this by running:
+
+```
+PYTHON_CONFIGURE_OPTS="--with-dtrace" pyenv install $(cat .python-version)
+```
+
+Then you can list the available probes:
+
+```
+$ source .venv/bin/activate
+$ python3.11 -q &
+$ sudo dtrace -l -P python$!
+$ fg # and Ctrl+D to exit the Python shell
+```
+
+Here's an example of the output of `dtrace`:
+
+```
+   ID   PROVIDER            MODULE                          FUNCTION NAME
+19372 python22133 libpython3.11.dylib                         sys_audit audit
+19373 python22133 libpython3.11.dylib                  sys_audit_tstate audit
+19374 python22133 libpython3.11.dylib          _PyEval_EvalFrameDefault function-entry
+19375 python22133 libpython3.11.dylib            dtrace_function_return function-return
+19376 python22133 libpython3.11.dylib          _PyEval_EvalFrameDefault function-return
+19377 python22133 libpython3.11.dylib                   gc_collect_main gc-done
+19378 python22133 libpython3.11.dylib                   gc_collect_main gc-start
+19379 python22133 libpython3.11.dylib  PyImport_ImportModuleLevelObject import-find-load-done
+19380 python22133 libpython3.11.dylib  PyImport_ImportModuleLevelObject import-find-load-start
+19381 python22133 libpython3.11.dylib          _PyEval_EvalFrameDefault line
+```
+
+On macOS you may get a warning about system integrity protection. In hosted environments, SIP cannot be disabled. As long as you there are certain probes availalble, for example, `function-entry` and `function-return` it does _not_ impact use of DTrace for the purposes of Python tracing. If for some reason you need to disable SIP, you can follow the instructions [on Apple's Developer documentation site](https://developer.apple.com/documentation/security/disabling_and_enabling_system_integrity_protection).
+
+The [`call_stack.d`](./call_stack.d) DTrace script, based on [the Python HOWTO documentation](https://docs.python.org/3/howto/instrumentation.html), will print out the function entry and exit points with the function names and when they were called. It will also print out the lines executed. [The available static markers and their arguments are documented in the Python HOWTO](https://docs.python.org/3/howto/instrumentation.html#available-static-markers). There is a commented block in the script to filter the lines to trace.
+
+You can run it like this:
+
+```
+$ sudo dtrace -s call_stack.d -c 'python3.11 program.py'
+```
+
+Timing results with DTrace:
+
+| Method             | Real Time  | User Time | System Time |
+|--------------------|------------|-----------|-------------|
+| Tracing every line | 0m35.006s  | 0m7.995s  | 0m28.952s   |
