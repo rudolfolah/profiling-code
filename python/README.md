@@ -899,6 +899,12 @@ $ sudo dtrace -l -P python$!
 $ fg # and Ctrl+D to exit the Python shell
 ```
 
+More information on DTrace:
+- [`dtrace` CLI Options](https://docs.oracle.com/en/operating-systems/solaris/oracle-solaris/11.4/dtrace-guide/dtrace-command-options.html)
+- [Output Formatting in DTrace](https://docs.oracle.com/en/operating-systems/solaris/oracle-solaris/11.4/dtrace-guide/output-formatting-dtrace1.html)
+- [Conditional Expressions](https://docs.oracle.com/en/operating-systems/solaris/oracle-solaris/11.4/dtrace-guide/conditional-expressions.html)
+
+#### Example Output
 Here's an example of the output of `dtrace`:
 
 ```
@@ -915,8 +921,17 @@ Here's an example of the output of `dtrace`:
 19381 python22133 libpython3.11.dylib          _PyEval_EvalFrameDefault line
 ```
 
-On macOS you may get a warning about system integrity protection. In hosted environments, SIP cannot be disabled. As long as you there are certain probes availalble, for example, `function-entry` and `function-return` it does _not_ impact use of DTrace for the purposes of Python tracing. If for some reason you need to disable SIP, you can follow the instructions [on Apple's Developer documentation site](https://developer.apple.com/documentation/security/disabling_and_enabling_system_integrity_protection).
+#### Running DTrace on MacOS
+##### System Integrity Protection
+On macOS you may get a warning about *system integrity protection*:
 
+```
+dtrace: system integrity protection is on, some features will not be available
+```
+
+In hosted environments, SIP cannot be disabled. As long as you there are certain probes available, for example, `function-entry` and `function-return` it does _not_ impact use of DTrace for the purposes of Python tracing. If for some reason you need to disable SIP, you can follow the instructions [on Apple's Developer documentation site](https://developer.apple.com/documentation/security/disabling_and_enabling_system_integrity_protection).
+
+##### DTrace Script: `call_stack.d`
 The [`call_stack.d`](./call_stack.d) DTrace script, based on [the Python HOWTO documentation](https://docs.python.org/3/howto/instrumentation.html), will print out the function entry and exit points with the function names and when they were called. It will also print out the lines executed. [The available static markers and their arguments are documented in the Python HOWTO](https://docs.python.org/3/howto/instrumentation.html#available-static-markers). There is a commented block in the script to filter the lines to trace.
 
 You can run it like this:
@@ -930,3 +945,12 @@ Timing results with DTrace:
 | Method             | Real Time  | User Time | System Time |
 |--------------------|------------|-----------|-------------|
 | Tracing every line | 0m35.006s  | 0m7.995s  | 0m28.952s   |
+
+##### DTrace Script: `lines.d`
+The [`lines.d`](./lines.d) DTrace script will print out the lines executed in the Python program. You can run it like this:
+
+```
+$ sudo dtrace -s lines.d -c 'python3.11 program.py'
+```
+
+The lines printed are filtered to only be within the `program.py` file.
