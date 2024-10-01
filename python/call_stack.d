@@ -1,7 +1,7 @@
 self int indent;
 
 python$target:::function-entry
-/copyinstr(arg0) == "program.py"/
+/basename(copyinstr(arg0)) == "program.py"/
 {
         self->trace = 1;
 }
@@ -25,15 +25,13 @@ python$target:::function-return
 }
 
 python$target:::function-return
-/copyinstr(arg0) == "program.py"/
+/basename(copyinstr(arg0)) == "program.py"/
 {
         self->trace = 0;
 }
 
 python$target:::line
-/*
-/copyinstr(arg0) == "program.py"/
-*/
+/basename(copyinstr(arg0)) == "program.py"/
 {
         printf("%d\t%*s:", timestamp, 15, probename);
         printf("%*s", self->indent, "");
