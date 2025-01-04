@@ -14,3 +14,4 @@ Shows how to use the profiler and what the output looks like. Includes only tool
 * [Memory and CPU profiling, "The Hacker's Guide to Scaling Python", Julien Danjou](https://www.educative.io/courses/hackers-guide-scaling-python/memory-and-cpu-profiling)
 * [Python 3.12 support for the Linux perf profiler](https://docs.python.org/3/howto/perf_profiling.html)
 * [pyperformance - Python Performance Benchmarking Suite](https://github.com/python/pyperformance)
+* [ebpf-apps](https://github.com/feiskyer/ebpf-apps): sample apps for eBPF for C, C++, Python, Go, and Rust.
