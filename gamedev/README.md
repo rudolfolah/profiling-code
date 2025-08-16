@@ -5,6 +5,7 @@ Tools:
 - [Unity Profiler](https://docs.unity3d.com/6000.1/Documentation/Manual/Profiler.html)
 - [Memory Profiler](https://docs.unity3d.com/Packages/com.unity.memoryprofiler@latest)
 - [Frame Debugger](https://docs.unity3d.com/6000.1/Documentation/Manual/FrameDebugger.html)
+- [Project Auditor](https://docs.unity3d.com/Packages/com.unity.project-auditor@1.0/manual/index.html), [getting started with Unity Project Auditor video](https://www.youtube.com/watch?v=8QQG0J624LY)
 
 Documentation and guides and tutorials:
 - [Ultimate Guide to Profiling Unity Games](https://unity.com/resources/ultimate-guide-to-profiling-unity-games)
