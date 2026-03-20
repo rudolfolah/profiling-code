@@ -16,6 +16,15 @@ Shows how to use the profiler and what the output looks like. Includes only tool
 - [valgrind](https://valgrind.org/info/tools.html): memcheck for memory profiling, cachegrind for CPU cache profiling, callgrind is cachegrind with a call graph, massif for heap profiling
 - [Apple Instruments](https://help.apple.com/instruments/mac/current/)
 
+## 🧰 GPU Profiling Tools
+- [NVIDIA Visual Profiler](https://developer.nvidia.com/nvidia-visual-profiler)
+- [NVIDIA Nsight Systems](https://developer.nvidia.com/nsight-systems)
+- [NVIDIA Nsight Compute](https://developer.nvidia.com/nsight-compute)
+- [Android GPU Inspector (AGI)](https://developer.android.com/agi)
+- [Metal debugger](https://developer.apple.com/documentation/xcode/metal-debugger)
+- [AMD uProf](https://www.amd.com/en/developer/uprof.html)
+- [Intel VTune Profiler](https://www.intel.com/content/www/us/en/developer/tools/oneapi/vtune-profiler.html)
+
 # 📚 Books and Articles and Sample Code
 * ["All my favorite tracing tools: eBPF, QEMU, Perfetto, new ones I built and more", Tristan Hume](https://thume.ca/2023/12/02/tracing-methods/)
 * ["Systems Performance: Enterprise and the Cloud, 2nd Edition", Brendan Gregg](https://www.brendangregg.com/systems-performance-2nd-edition-book.html)
