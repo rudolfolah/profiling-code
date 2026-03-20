@@ -4,7 +4,15 @@ Collection of examples and links that uses different profiling tools to show mem
 
 Shows how to use the profiler and what the output looks like. Includes only tools that are maintained.
 
-* [awesome-profiling](https://github.com/msaroufim/awesome-profiling): Great list of profiling tools, though includes some tools for Python that are no longer maintained.
+[awesome-profiling](https://github.com/msaroufim/awesome-profiling): Great list of profiling tools, though includes some tools for Python that are no longer maintained.
+
+# ⚙️ Tools and Techniques for Profiling Code
+
+- [Game Development: C#, Unity, Godot](./gamedev/README.md)
+- [Node.js: JavaScript, TypeScript](./javascript/README.md)
+- [Python](./python/README.md)
+
+# 📚 Books and Articles and Sample Code
 * ["All my favorite tracing tools: eBPF, QEMU, Perfetto, new ones I built and more", Tristan Hume](https://thume.ca/2023/12/02/tracing-methods/)
 * ["Systems Performance: Enterprise and the Cloud, 2nd Edition", Brendan Gregg](https://www.brendangregg.com/systems-performance-2nd-edition-book.html)
 * ["BPF Performance Tools", Brendan Gregg](https://www.brendangregg.com/bpf-performance-tools-book.html)
