@@ -11,6 +11,10 @@ Shows how to use the profiler and what the output looks like. Includes only tool
 - [Game Development: C#, Unity, Godot](./gamedev/README.md)
 - [Node.js: JavaScript, TypeScript](./javascript/README.md)
 - [Python](./python/README.md)
+- [gprof: GNU Profiler](https://sourceware.org/binutils/docs/gprof/)
+- [Tracy Profiler](https://github.com/wolfpld/tracy): supports C, C++, Lua, Python with 3rd party bindings for Rust, Zig, C#
+- [valgrind](https://valgrind.org/info/tools.html): memcheck for memory profiling, cachegrind for CPU cache profiling, callgrind is cachegrind with a call graph, massif for heap profiling
+- [Apple Instruments](https://help.apple.com/instruments/mac/current/)
 
 # 📚 Books and Articles and Sample Code
 * ["All my favorite tracing tools: eBPF, QEMU, Perfetto, new ones I built and more", Tristan Hume](https://thume.ca/2023/12/02/tracing-methods/)
