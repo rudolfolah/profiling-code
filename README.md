@@ -15,6 +15,8 @@ Shows how to use the profiler and what the output looks like. Includes only tool
 - [Tracy Profiler](https://github.com/wolfpld/tracy): supports C, C++, Lua, Python with 3rd party bindings for Rust, Zig, C#
 - [valgrind](https://valgrind.org/info/tools.html): memcheck for memory profiling, cachegrind for CPU cache profiling, callgrind is cachegrind with a call graph, massif for heap profiling
 - [Apple Instruments](https://help.apple.com/instruments/mac/current/)
+- [VisualVM](https://visualvm.github.io/): Java profiling tool
+- [Java Flight Recorder and JDK Mission Control](https://www.oracle.com/java/technologies/jdk-mission-control.html): Java profiling tool
 
 ## 🧰 GPU Profiling Tools
 - [NVIDIA Visual Profiler](https://developer.nvidia.com/nvidia-visual-profiler)
