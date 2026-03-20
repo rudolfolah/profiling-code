@@ -23,3 +23,13 @@ Shows how to use the profiler and what the output looks like. Includes only tool
 * [Python 3.12 support for the Linux perf profiler](https://docs.python.org/3/howto/perf_profiling.html)
 * [pyperformance - Python Performance Benchmarking Suite](https://github.com/python/pyperformance)
 * [ebpf-apps](https://github.com/feiskyer/ebpf-apps): sample apps for eBPF for C, C++, Python, Go, and Rust.
+
+# 📺 YouTube Videos
+- [Python profiling and performance tuning in production](https://www.youtube.com/watch?v=B9Kv3Fije1I)
+- [Memray: The endgame Python memory profiler](https://www.youtube.com/watch?v=wn_2e33KaYQ)
+- [GopherCon 2021: Go Profiling and Observability from Scratch](https://www.youtube.com/watch?v=7hg4T2Qqowk)
+
+## [eBPF](https://ebpf.io/)
+- [A Beginner's Guide to eBPF Programming with Go](https://www.youtube.com/watch?v=uBqRv8bDroc)
+- [eBPF: Fueling New Flame Graphs & more](https://www.youtube.com/watch?v=HKQR7wVapgk)
+- [Kernel Analysis Using eBPF](https://www.youtube.com/watch?v=AZTtTgni7LQ)
