@@ -9,7 +9,7 @@ Shows how to use the profiler and what the output looks like. Includes only tool
 # ⚙️ Tools and Techniques for Profiling Code
 - [Game Development: C#, Unity, Godot](./gamedev/README.md)
 - [Node.js: JavaScript, TypeScript](./javascript/README.md)
-- [Python](./python/README.md)
+- [Python](./python/README.md): examples using cProfile, guppy3, psutil, memray, pyinstrument, tracemalloc, yappi, filprofiler, DTrace
   - [Python 3.12 support for the Linux perf profiler](https://docs.python.org/3/howto/perf_profiling.html)
   - [pyperformance - Python Performance Benchmarking Suite](https://github.com/python/pyperformance)
 - [gprof: GNU Profiler](https://sourceware.org/binutils/docs/gprof/)
