@@ -23,6 +23,7 @@ Shows how to use the profiler and what the output looks like. Includes only tool
 - [VisualVM](https://visualvm.github.io/): Java profiling tool
 - [Java Flight Recorder and JDK Mission Control](https://www.oracle.com/java/technologies/jdk-mission-control.html): Java profiling tool
 - [Chrome DevTools, JavaScript in the Web Browser](https://developer.chrome.com/docs/devtools/performance/reference)
+- [AI: Claude Skill "performance profiler" for various performance profiling tools](https://github.com/alirezarezvani/claude-skills/tree/main/engineering/performance-profiler)
 
 ## 🧰 GPU Profiling Tools
 - [NVIDIA Visual Profiler](https://developer.nvidia.com/nvidia-visual-profiler)
