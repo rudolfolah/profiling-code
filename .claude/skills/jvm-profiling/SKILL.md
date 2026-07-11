@@ -60,8 +60,10 @@ jcmd <PID> JFR.check
 
 Start a bounded recording using the JDK's low-overhead configuration:
 
+Use a concrete, unique filename for each capture. JFR's `filename` option does **not** expand the `%p` and `%t` placeholders supported by unified JVM logging; passing those placeholders can make JVM startup fail. Generate the timestamp/PID in the shell, service manager, or deployment configuration before invoking `java` or `jcmd`. The filenames below are examples of already-expanded capture IDs.
+
 ```bash
-jcmd <PID> JFR.start name=latency settings=default duration=90s filename=/secure/profiles/latency-%p-%t.jfr
+jcmd <PID> JFR.start name=latency settings=default duration=90s filename=/secure/profiles/latency-20260710T120000Z-12345.jfr
 jcmd <PID> JFR.check name=latency
 ```
 
@@ -70,7 +72,7 @@ jcmd <PID> JFR.check name=latency
 ```bash
 jcmd <PID> JFR.start name=incident settings=default
 # Wait for the known failure or latency spike.
-jcmd <PID> JFR.dump name=incident filename=/secure/profiles/incident-%p-%t.jfr
+jcmd <PID> JFR.dump name=incident filename=/secure/profiles/incident-20260710T120000Z-12345.jfr
 # Use JFR.stop instead when you want to finish the recording and release it.
 jcmd <PID> JFR.stop name=incident
 ```
@@ -78,7 +80,7 @@ jcmd <PID> JFR.stop name=incident
 `JFR.dump` writes a snapshot while the recording continues; `JFR.stop` ends it. Do not use an unbounded recording without a disk/retention plan. For a short, higher-detail capture, use `settings=profile` and a small duration only after checking that the extra overhead is acceptable:
 
 ```bash
-jcmd <PID> JFR.start name=short-profile settings=profile duration=30s filename=/secure/profiles/profile-%p-%t.jfr
+jcmd <PID> JFR.start name=short-profile settings=profile duration=30s filename=/secure/profiles/profile-20260710T120000Z-12345.jfr
 ```
 
 If attach fails, do not repeatedly retry against a live production process. Check PID namespace and permissions, use the target JDK's `jcmd`, and consult the service/container's diagnostic policy. A restart may be required for startup-only flags or for a JVM that disallows attach.
@@ -88,13 +90,13 @@ If attach fails, do not repeatedly retry against a live production process. Chec
 Add a startup option to the normal Java launch command when startup, class loading, or an early failure matters:
 
 ```bash
-java -XX:StartFlightRecording=name=startup,settings=default,duration=2m,filename=/secure/profiles/startup-%p-%t.jfr <the-usual-java-options-and-application-command>
+java -XX:StartFlightRecording=name=startup,settings=default,duration=2m,filename=/secure/profiles/startup-20260710T120000Z.jfr <the-usual-java-options-and-application-command>
 ```
 
 For a continuously available, bounded rolling window, configure retention and dump on exit. Check the path and disk budget before enabling it:
 
 ```bash
-java -XX:StartFlightRecording=name=rolling,settings=default,maxage=1h,maxsize=512m,dumponexit=true,filename=/secure/profiles/rolling-%p-%t.jfr <the-usual-java-options-and-application-command>
+java -XX:StartFlightRecording=name=rolling,settings=default,maxage=1h,maxsize=512m,dumponexit=true,filename=/secure/profiles/rolling-20260710T120000Z.jfr <the-usual-java-options-and-application-command>
 ```
 
 A startup option is part of process configuration: deploy it deliberately, verify the file is created, and remove it after the investigation if it is not an intentional baseline. Do not assume that a startup recording captures data from before the JVM was launched; it starts during JVM initialization.

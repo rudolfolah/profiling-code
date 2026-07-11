@@ -1,3 +1,8 @@
+---
+name: game-profiling
+description: Profile Unity and Godot frame hitches, low frame rates, allocations, retained memory, rendering cost, and project-wide performance risks with reproducible captures.
+---
+
 # Game Development Performance Profiling Skill
 
 Use this skill when investigating frame hitches, low frame rate, memory growth, allocation spikes, rendering cost, or project-wide performance risks in Unity or Godot. Treat a profiler capture as evidence: preserve the workload and environment, separate measured facts from hypotheses, and recommend one change at a time so that a before/after capture can verify the result.
@@ -11,7 +16,7 @@ Before opening a tool, ask for (or record):
 - exact scene, player input, camera, quality settings, resolution, VSync/frame cap, and a short step-by-step reproduction;
 - whether the symptom is a sustained low rate, an intermittent hitch, a memory/GC increase, or a visual/rendering issue.
 
-Prefer a Development/Profiling player on the target hardware over the Editor. Keep the same quality, resolution, refresh rate, renderer, scripting backend, and asset data as the reported scenario. Warm up loading and shaders, then record a short steady-state window and repeat the scenario several times. Compare medians or p95 frame times, not a single unusually long frame.
+Prefer a Development/Profiling player on the target hardware over the Editor. Keep the same quality, resolution, refresh rate, renderer, scripting backend, and asset data as the reported scenario. Warm up loading and shaders, then record a short steady-state window and repeat the scenario several times. Clarify whether a reported hitch duration is the total frame time, time over budget, or an added stall. For sustained workloads, compare like-for-like frame-time distributions. For event-triggered hitches, define a fixed event window and report the trigger frame or maximum frame per trial, the individual values, median, and sample count; report a tail percentile only when enough repeated events make it meaningful.
 
 ## Choose the tool
 
@@ -72,9 +77,10 @@ Auditor is static analysis: it can find risky import settings, serialized data, 
 Use the [Godot Profiler](https://docs.godotengine.org/en/stable/tutorials/scripting/debug/the_profiler.html) for a Godot runtime symptom.
 
 1. Run the target scene or build with the same renderer, resolution, VSync/frame cap, quality, and device as the report. In the Debugger, record a short, repeatable scenario with the Profiler, then stop recording before inspecting it. Use the function list/call tree to compare self time (work in that function) with total time (including called functions), and separate script process work from physics/process work where the version exposes it.
-2. Check the Profiler's frame monitors during the same window. Correlate frame time/FPS with available `Process`, `Physics Process`, rendering (draw calls, objects, or similar), and memory/video-memory counters. A spike in a monitor tells you *when* and which subsystem changed; use the function profile or a targeted rendering investigation to explain *why*. Monitor sets and labels differ by Godot release and renderer, so name the exact monitor shown in the capture.
-3. Compare a baseline and a changed build under the same input and warm-up. Repeat intermittent hitches; do not conclude from the first frame after loading or shader compilation. If script time is low while frame time is high, investigate engine/rendering/GPU work rather than adding script micro-optimizations.
-4. Confirm a suspected change with the game's own frame metrics and a non-profiled run. For a rendering-pass question, use Godot's renderer/debug facilities or a platform GPU tool; the script Profiler alone cannot identify every render pass.
+2. Check the Profiler's frame monitors during the same window. Correlate frame time/FPS with available `Process`, `Physics Process`, rendering counters such as draw calls, objects, and primitives, pipeline-compilation counters where available, and memory/video-memory counters. Preserve the exact labels because monitor sets differ by Godot release and renderer. Record each monitor's observed update cadence: values sampled every frame may repeat a slower-updating value and are not independent samples, so do not derive frame-time percentiles from duplicated monitor readings. Use Profiler frame samples or direct frame timestamps for per-frame distributions. Rendering counters show that submitted work changed; they are not GPU timings, bandwidth, occupancy, or proof of a GPU bottleneck.
+3. For a rendering symptom, make a controlled A/B capture in one warmed build: keep the camera, scene, resolution/render scale, quality, VSync/frame cap, renderer/API, and effect state deterministic, then compare fixed windows with only the suspect effect disabled versus enabled. If script/process evidence does not explain the frame-time change, record the target OS, GPU, renderer, and graphics API before selecting a compatible platform GPU tool. Preserve the existing renderer/API rather than switching APIs for capture.
+4. Use that GPU tool to collect supported GPU timestamps or hardware counters when the question is GPU milliseconds, fill/fragment cost, bandwidth, or occupancy. A frame debugger's pass/event list and draw count remain submission evidence, not GPU-cost evidence. Repeat intermittent hitches; do not conclude from first-use shader or pipeline compilation, and do not micro-optimize scripts merely because total frame time is high.
+5. Confirm a suspected change with the game's own frame metrics in a non-profiled run. The Godot script Profiler alone cannot identify every render pass or account for all engine and GPU work.
 
 Profiler recording and remote inspection add overhead and can perturb short frames. The Editor and a running export may differ. Treat `await`/idle, draw, physics, and synchronization time according to the version's labels, and preserve the exact Godot version, renderer, monitor names, and capture settings with the result.
 
@@ -84,6 +90,7 @@ Profiler recording and remote inspection add overhead and can perturb short fram
 - Keep VSync, frame caps, refresh rate, resolution, dynamic resolution, quality, power mode, thermal state, and background apps consistent. Record when a cap is intentionally enabled.
 - Warm up shaders, caches, scene streaming, and asset loading. Exclude startup/loading frames when investigating steady-state gameplay, but capture them separately for load-time problems.
 - Record a short named interval around the symptom, repeat at least three times when practical, and retain the raw capture/snapshot plus metadata (engine/package versions, commit, build type, device/OS, renderer/API, scene, action, and settings).
+- Give automated captures both a deterministic frame/event limit and a wall-clock timeout. Fail loudly and label the capture incomplete if either limit is exceeded; never let a benchmark or unattended player run indefinitely.
 - Disable unrelated Editor windows, gizmos, logging, breakpoints, and visual debug overlays. Avoid Deep Profile or extra monitors for the baseline; use them only in a targeted diagnostic capture.
 - Never infer a leak from one larger snapshot, a GPU bottleneck from draw-call count alone, or a CPU bottleneck from a single frame. Compare like-for-like captures and validate the proposed fix in a non-profiled run.
 - Keep captures reproducible and safe to share: scrub sensitive paths/project names where required, avoid committing large binary snapshots by default, and do not alter production settings solely to make a profiler capture look better.

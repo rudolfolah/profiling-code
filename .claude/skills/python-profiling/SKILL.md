@@ -22,7 +22,9 @@ python program.py
 time python program.py
 ```
 
-`program.py` fetches a Wikipedia page over HTTPS before parsing it. Network, DNS, TLS, server, and response-size variance can dominate timings. For repeatable comparisons, replace the network response with a checked-in/local fixture or otherwise keep the input and environment fixed; never treat one network run as a reliable regression measurement.
+`program.py` fetches a Wikipedia page over HTTPS before parsing it. Treat a non-empty top-ten word list as the baseline preflight; `[]` means the intended parsing workload did not run and the resulting profile is not useful. The current target calls `requests.get(...)` without a descriptive `User-Agent` or `raise_for_status()`, so Wikimedia may return its small HTTP 403 robot-policy response and the program may silently print `[]`. If that happens, stop before profiling and make the workload valid: preferably use a checked-in/local fixture, or update the request to use a policy-compliant descriptive `User-Agent` and fail on non-success responses. Do not compare a rejection-response profile with a successful-page profile.
+
+Even with a successful response, network, DNS, TLS, server, and response-size variance can dominate timings. For repeatable comparisons, keep the input and environment fixed; never treat one network run as a reliable regression measurement.
 
 The repository's comparison runner is:
 
@@ -52,12 +54,13 @@ For detailed commands, use the focused skills `python-cpu-profiling`, `python-me
 ## Reproducible profiling workflow
 
 1. Define the observable: elapsed time, CPU time, peak RSS, Python allocation delta, native allocation, object count, or call sequence.
-2. Record the baseline command, Python version, dependency lock/requirements, input, host, and profiler options.
-3. Run the smallest profiler that measures that observable. Keep output separate from source and name artifacts with the run/configuration.
-4. Inspect the profiler's own output format rather than inferring from process RSS alone. Distinguish inclusive/cumulative time from self/tottime and live memory from total allocated memory.
-5. Repeat enough times to see variance. For network-bound examples, use a local fixture before comparing code changes.
-6. Verify a proposed optimization with the same unprofiled command and at least one profile that explains the change. A faster profile can merely reflect a different input or warmed cache.
-7. Remove generated artifacts or keep them in the existing ignored patterns (`*.out`, `memray-*.html`, and `memray-*.bin` under `python/`). Do not commit credentials, response bodies, or production memory dumps.
+2. Validate that the unprofiled workload completed its intended work. For this repository, `[]` is a failed preflight, not a valid fast baseline.
+3. Record the baseline command, Python version, dependency lock/requirements, input, host, and profiler options.
+4. Run the smallest profiler that measures that observable. Keep output separate from source and name artifacts with the run/configuration.
+5. Inspect the profiler's own output format rather than inferring from process RSS alone. Distinguish inclusive/cumulative time from self/tottime and live memory from total allocated memory.
+6. Repeat enough times to see variance. For network-bound examples, use a local fixture before comparing code changes.
+7. Verify a proposed optimization with the same unprofiled command and at least one profile that explains the change. A faster profile can merely reflect a different input or warmed cache.
+8. Remove generated artifacts or keep them in the existing ignored patterns (`*.out`, `memray-*.html`, and `memray-*.bin` under `python/`). Do not commit credentials, response bodies, or production memory dumps.
 
 ## Common interpretation traps
 

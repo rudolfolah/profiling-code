@@ -145,27 +145,27 @@ open memray-flamegraph-program.py.*.html  # macOS
 Prefer deterministic paths for automation and artifact handoff:
 
 ```bash
-memray run --output /tmp/program-memray.bin program.py
+memray run --force --output /tmp/program-memray.bin program.py
 memray stats /tmp/program-memray.bin
 memray summary /tmp/program-memray.bin
-memray flamegraph --output /tmp/program-memray.html /tmp/program-memray.bin
+memray flamegraph --force --output /tmp/program-memray.html /tmp/program-memray.bin
 open /tmp/program-memray.html
 ```
 
-`memray run` starts a new process and records allocation/deallocation events. The default capture name is `memray-<script>.<pid>.bin`; `--output` avoids shell-glob ambiguity. `stats`, `summary`, `table`, `tree`, and `flamegraph` are reporters, not additional profiling runs. A flame graph is centered on allocations live at the peak; use its wide frames to find the call paths responsible for the high-water mark. The binary is the source artifact, while the HTML is a derived report. Keep the binary and report from the same run.
+`memray run` starts a new process and records allocation/deallocation events. The default capture name is `memray-<script>.<pid>.bin`; `--output` avoids shell-glob ambiguity. Memray refuses to overwrite an existing capture or report unless `--force` is supplied, so deterministic automation paths need `--force` to be repeatable. Copy any artifact that must be preserved before rerunning these commands. `stats`, `summary`, `table`, `tree`, and `flamegraph` are reporters, not additional profiling runs. A flame graph is centered on allocations live at the peak; use its wide frames to find the call paths responsible for the high-water mark. The binary is the source artifact, while the HTML is a derived report. Keep the binary and report from the same run.
 
 Native and Python allocator modes answer different questions:
 
 ```bash
 # Python frames plus normal system-allocation tracking:
-memray run --output /tmp/program-memray.bin program.py
+memray run --force --output /tmp/program-memray.bin program.py
 
 # Resolve C/C++ frames (slower, and reports must be generated on this machine):
-memray run --native --output /tmp/program-memray-native.bin program.py
-memray flamegraph --output /tmp/program-memray-native.html /tmp/program-memray-native.bin
+memray run --native --force --output /tmp/program-memray-native.bin program.py
+memray flamegraph --force --output /tmp/program-memray-native.html /tmp/program-memray-native.bin
 
 # Include individual Python allocator-pool events (much larger/slower capture):
-memray run --trace-python-allocators --output /tmp/program-memray-python.bin program.py
+memray run --trace-python-allocators --force --output /tmp/program-memray-python.bin program.py
 ```
 
 Normal Memray tracking sees requests made to the system allocator; CPython's object allocator pools many individual objects, so those individual object events are not visible unless `--trace-python-allocators` is used. That option is useful for leak investigations but produces much larger files and materially more overhead. `--native` resolves native stack frames and has moderate overhead because instruction pointers are resolved per allocation; generate reports on the same machine as capture so loaded-library symbols match. Memray allocation bytes are not the same as RSS: the process can hold allocator arenas, shared pages, interpreter state, or mappings that do not appear as currently-live user allocations. Use psutil alongside it when the question is the OS-visible footprint.
@@ -282,7 +282,7 @@ tar -czf /tmp/program-fil-result.tgz fil-result
 
 Fil tracks allocations over the run and attributes memory present at the peak to call stacks, including native extension paths that Python-only tracemalloc can miss. It is therefore complementary to psutil: Fil explains the peak's allocation paths, while psutil reports the OS footprint. Fil is an offline profiler with substantial all-allocation overhead, not a production monitor; avoid drawing performance conclusions from a profiled run. Its target is a complete program run, and the pinned older version should be used with the repository's Python 3.11.5 environment. Be cautious with multiprocessing workloads (the example program does not use multiprocessing) and verify support before applying it to a process tree.
 
-The repository's `python/.gitignore` does not ignore `fil-result/`; keep reports outside the repository or remove the directory after preserving a needed artifact. SVG reports may include source paths and code context, so do not publish them blindly.
+The repository's `python/.gitignore` ignores `fil-result/`, so generated reports stay out of Git. Preserve a needed report before removing it, and do not rely on the ignore rule as a backup policy. SVG reports may include source paths and code context, so do not publish them blindly.
 
 ## A safe investigation sequence
 
