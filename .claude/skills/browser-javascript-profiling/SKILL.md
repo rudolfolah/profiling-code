@@ -25,6 +25,105 @@ This is **browser-page profiling**, not Node.js process profiling. The existing 
 
 For a load investigation, use **Record and reload** so the navigation is included in the trace. For a runtime investigation, use **Record**, then perform only the interaction under test. Save a trace only after confirming that its selected interval and settings represent the intended scenario.
 
+### Agent-executable capture with the Browser tool
+
+The DevTools panel instructions above are useful for a person, but an agent cannot open DevTools inside the Browser tool's page tab. Do not stop after telling the user to record a trace manually. When the page can be driven by the Browser tool, use a Chrome DevTools Protocol (CDP) session from Puppeteer's `page.createCDPSession()` and capture the scenario directly.
+
+1. Open the target with the Browser tool and reach the deterministic starting state.
+2. In one `browser.run` call, create a CDP session, start `Tracing`, perform the interaction, stop tracing, wait for `Tracing.tracingComplete`, and drain its `IO` stream.
+3. Keep the trace in memory unless the user explicitly needs an artifact. Saved traces can contain sensitive data.
+4. Report the browser version, URL/build, viewport, cache state, throttling, exact action, and whether `dataLossOccurred` was false.
+
+Use this tested `browser.run` body as the starting point. Replace only the marked scenario and the analysis needed for the hypothesis:
+
+```js
+const client = await page.createCDPSession();
+let tracingStarted = false;
+
+try {
+  const browserVersion = await client.send('Browser.getVersion');
+
+  await client.send('Tracing.start', {
+    transferMode: 'ReturnAsStream',
+    streamFormat: 'json',
+    traceConfig: {
+      recordMode: 'recordAsMuchAsPossible',
+      enableSampling: true,
+      includedCategories: [
+        'devtools.timeline',
+        'v8.execute',
+        'blink.user_timing',
+        'disabled-by-default-devtools.timeline',
+      ],
+    },
+  });
+  tracingStarted = true;
+
+  // Scenario: replace this selector/action and keep the capture bounded.
+  await page.evaluate(() => document.querySelector('#work').click());
+  await new Promise(resolve => setTimeout(resolve, 100));
+
+  // Subscribe before Tracing.end so the completion event cannot be missed.
+  const completed = new Promise(resolve => {
+    client.once('Tracing.tracingComplete', resolve);
+  });
+  await client.send('Tracing.end');
+  tracingStarted = false;
+
+  const completion = await completed;
+  if (completion.dataLossOccurred) {
+    throw new Error('Trace buffer lost data; repeat with a shorter scenario');
+  }
+  if (!completion.stream) {
+    throw new Error('Tracing completed without a result stream');
+  }
+
+  let traceJson = '';
+  for (;;) {
+    const chunk = await client.send('IO.read', {
+      handle: completion.stream,
+    });
+    traceJson += chunk.data;
+    if (chunk.eof) break;
+  }
+  await client.send('IO.close', {handle: completion.stream});
+
+  const {traceEvents} = JSON.parse(traceJson);
+  const completeEvents = traceEvents.filter(
+    event => event.ph === 'X' && event.dur,
+  );
+  const totalMs = name =>
+    completeEvents
+      .filter(event => event.name === name)
+      .reduce((sum, event) => sum + event.dur / 1000, 0);
+
+  const evidence = {
+    browser: browserVersion.product,
+    traceEventCount: traceEvents.length,
+    eventDispatchMs: totalMs('EventDispatch'),
+    layoutMs: totalMs('Layout'),
+    styleMs: totalMs('UpdateLayoutTree'),
+    gcMs: totalMs('MinorGC') + totalMs('MajorGC'),
+  };
+  display(evidence);
+  return evidence;
+} finally {
+  // A failed action must not leave browser-global tracing active.
+  if (tracingStarted) {
+    try {
+      await client.send('Tracing.end');
+    } catch {}
+  }
+  await client.detach();
+}
+```
+
+The totals above are a smoke-test summary, not a complete diagnosis. Trace events are nested, so never add `EventDispatch`, JavaScript, style, and layout totals into one “total CPU” number. For a real investigation, restrict analysis to the operation's User Timing interval, identify the renderer main thread, rank complete events by duration/self-time, and inspect the event arguments and stacks that support the hypothesis. Use `performance.getEntriesByName()` only to corroborate a marker duration; it cannot replace the trace because it has no layout, paint, network, task, or call-stack attribution.
+
+For **load profiling**, start tracing before `tab.goto(...)` or `page.goto(...)` in the same `browser.run` call, then wait for the agreed readiness condition before ending the trace. For **runtime profiling**, navigate and warm up first, then start tracing immediately before the action. Set cache and CPU/network emulation through CDP before capture when required, and repeat with identical settings.
+
+If `Tracing.start` reports that tracing is already active, an earlier run failed without cleanup. Close and kill the Browser tool tab/process, reopen it, and repeat with the `try`/`finally` pattern above. If `tab.click()` times out on an otherwise present element during a synthetic fixture, use the normal observed element handle or `page.evaluate()` only when programmatic dispatch is an acceptable representation of the scenario; trusted pointer/input timing requires the real click path.
+
 ### Throttling and environment notes
 
 - CPU throttling is relative to the machine running Chrome. A `4x slowdown` is not a real replica of a particular phone's CPU architecture, thermal state, scheduler, or GPU. Calibrate a custom preset when appropriate, and report the preset with the result.
