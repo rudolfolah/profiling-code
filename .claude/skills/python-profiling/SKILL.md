@@ -1,11 +1,10 @@
 # Python Profiling Skill
 
-Use this skill when investigating CPU time, wall-clock latency, Python allocations, process memory, object growth, or interpreter-level events in the examples under `python/`. The repository compares multiple profilers around `python/program.py`; choose the narrowest tool that can answer the question instead of running every profiler by default.
+Use this skill when investigating CPU time, wall-clock latency, Python allocations, process memory, object growth, or interpreter-level events. Choose the narrowest tool that can answer the question instead of running every profiler by default.
 
 ## Repository setup and baseline
 
 The examples target the Python version in `python/.python-version` and use the virtual environment described in `python/README.md`:
-
 ```bash
 cd python
 pyenv install "$(cat .python-version)"  # only if that version is not installed
@@ -32,7 +31,9 @@ The repository's comparison runner is:
 ./timing.sh
 ```
 
-It invokes cProfile, tracemalloc, Memray, pyinstrument, yappi, Filprofiler, psutil, and guppy3. Profiling changes both runtime and memory behavior, so compare profiles only under the same Python build, dependency versions, input, warm-up state, and command-line options.
+Profiling changes both runtime and memory behavior, so compare profiles only under the same Python build, dependency versions, input, warm-up state, and command-line options.
+
+It invokes cProfile, tracemalloc, Memray, pyinstrument, yappi, Filprofiler, psutil, and guppy3.
 
 ## Choose by question
 
