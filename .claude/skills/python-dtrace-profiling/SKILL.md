@@ -1,6 +1,6 @@
 # Python DTrace Profiling Skill
 
-Use this skill when you need an event-by-event view of CPython execution on macOS: Python function entry/return events, source-line events, and their ordering in a real process. This repository's DTrace programs are `python/call_stack.d` and `python/lines.d`; run them from the `python/` directory against `program.py`.
+Use this skill when you need an event-by-event view of CPython execution on macOS: Python function entry/return events, source-line events, and their ordering in a real process.
 
 DTrace is **instrumentation tracing**, not a replacement name for every Python profiler. It observes CPython's static probes and prints a timestamped text stream. Use `cProfile`/`yappi` for function call timing, `pyinstrument` for sampled call stacks, `tracemalloc`/`memray`/`guppy3` for Python memory behavior, and `psutil` for process resource snapshots. DTrace is useful when the exact sequence and nesting of interpreter events matters.
 
@@ -17,27 +17,27 @@ Do not start with DTrace for a broad “what is slow?” question. Begin with th
 
 ## Prerequisites: an instrumented Python
 
-The checked-in `.python-version` is **3.11.5**. DTrace probes are not enabled in an ordinary prebuilt Python. CPython must be configured and compiled with `--with-dtrace`; this also applies when the interpreter is built in a Docker image. `--with-dtrace` is a build-time option, not a flag that can be added to `python3.11` later.
+DTrace probes are not enabled in an ordinary prebuilt Python. CPython must be configured and compiled with `--with-dtrace`; this also applies when the interpreter is built in a Docker image. `--with-dtrace` is a build-time option, not a flag that can be added to `python` at run-time.
 
 From this repository's `python/` directory, a fresh pyenv setup is:
 
 ```bash
 cd python
-PYTHON_CONFIGURE_OPTS="--with-dtrace" pyenv install $(cat .python-version)
-pyenv local
+PYTHON_CONFIGURE_OPTS="--with-dtrace" pyenv install <supported-cpython-version>
+pyenv shell <supported-cpython-version>
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-The first command builds the pinned version with DTrace support. If that version is already installed by pyenv without the option, installing it again will not convert the existing build; rebuild the version in a controlled pyenv environment (without deleting an environment you still need), then recreate the virtual environment if necessary. Verify the active interpreter before tracing:
+The first command builds the chosen supported CPython version with DTrace support. If that version is already installed by pyenv without the option, installing it again will not convert the existing build; rebuild the version in a controlled pyenv environment (without deleting an environment you still need), then recreate the virtual environment if necessary. Verify the active interpreter before tracing:
 
 ```bash
-python --version
-command -v python3.11
+python -VV
+command -v python
 ```
 
-The repository README's regular setup uses the same `pyenv local`, virtualenv, and requirements commands. The DTrace scripts themselves do not require a Python package beyond the instrumented interpreter, but `program.py` needs the dependencies installed by `requirements.txt` (`requests` and `beautifulsoup4`).
+The repository README's regular setup uses the same virtualenv and requirements commands. The DTrace scripts themselves do not require a Python package beyond the instrumented interpreter, but `program.py` needs the dependencies installed by `requirements.txt` (`requests` and `beautifulsoup4`).
 
 ### Confirm that probes exist
 
@@ -45,42 +45,42 @@ DTrace's Python provider name includes the target process ID. Start the exact in
 
 ```bash
 source .venv/bin/activate
-python3.11 -q &
+python -q &
 sudo dtrace -l -P python$!
 fg # press Ctrl+D to exit the Python shell
 ```
 
 `$!` is the shell's PID for the background Python process, so `python$!` expands to a provider such as `python22133`. Look for at least `function-entry`, `function-return`, and `line` in the probe list. The provider may also expose audit, import, and garbage-collection probes. The scripts in this repository use the target wildcard (`python$target`) and therefore attach to the process launched by DTrace's `-c` option rather than requiring you to copy a PID.
 
-Probe availability must be checked on the actual interpreter. CPython's static-marker implementation varies by release; `--with-dtrace` is necessary but does not make unsupported or missing probes appear. In particular, this repository pins an older 3.11.x build, so treat the probe listing and a small smoke run as authoritative. If the required probes are absent, rebuild with the option or use a CPython release/build that provides them; changing the `.d` file cannot fix a missing provider.
+Probe availability must be checked on the actual interpreter. CPython has supported DTrace static markers since Python 3.6, but a usable provider still depends on the interpreter build, OS support, and the probes exposed by that build. If the required probes are absent, rebuild CPython with `--with-dtrace` or use another DTrace-enabled CPython build; changing the `.d` file cannot fix a missing provider.
 
 ## Run the repository scripts
 
 Run these commands from `python/`, with the virtual environment activated, so `program.py` and the checked-in `.d` files resolve as shown in the README:
 
 ```bash
-sudo dtrace -s call_stack.d -c 'python3.11 program.py'
-sudo dtrace -s lines.d -c 'python3.11 program.py'
+sudo dtrace -s call_stack.d -c 'python program.py'
+sudo dtrace -s lines.d -c 'python program.py'
 ```
 
 These are the exact repository workflows:
 
 - `-s call_stack.d` loads `call_stack.d`.
 - `-s lines.d` loads `lines.d`.
-- `-c 'python3.11 program.py'` makes DTrace launch the target and stop tracing when it exits. The single quotes protect the command from the outer shell; they are not part of the Python command.
+- `-c 'python program.py'` makes DTrace launch the target and stop tracing when it exits. The single quotes protect the command from the outer shell; they are not part of the Python command.
 - `sudo` is normally required on macOS to enable DTrace and access the process. Expect a password prompt.
 
-The `-c` command assumes `python3.11` is visible to the environment used by DTrace. If `sudo` or pyenv changes `PATH` on a particular machine, keep the same command shape but substitute the absolute path printed by `command -v python3.11`, for example:
+The `-c` command assumes `python` resolves to the DTrace-enabled interpreter in the environment used by DTrace. If `sudo` or pyenv changes `PATH` on a particular machine, keep the same command shape but substitute the absolute path printed by `command -v python`, for example:
 
 ```bash
-sudo dtrace -s lines.d -c '/absolute/path/to/python3.11 program.py'
+sudo dtrace -s lines.d -c '/absolute/path/to/python program.py'
 ```
 
 The target's own output (the word counts printed by `program.py`) can appear alongside DTrace output. Redirect DTrace's combined output when a run is large:
 
 ```bash
-sudo dtrace -s lines.d -c 'python3.11 program.py' > lines.trace
-sudo dtrace -s call_stack.d -c 'python3.11 program.py' > call-stack.trace
+sudo dtrace -s lines.d -c 'python program.py' > lines.trace
+sudo dtrace -s call_stack.d -c 'python program.py' > call-stack.trace
 ```
 
 ## What the scripts trace
