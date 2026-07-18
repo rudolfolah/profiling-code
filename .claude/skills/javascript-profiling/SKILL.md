@@ -53,6 +53,22 @@ Load `profiles/app.cpuprofile` in Chrome DevTools using **Performance > Load pro
 
 CPU samples answer where on-CPU execution occurred. Waiting on sockets, timers, filesystem operations, worker results, or scheduling may dominate wall time without becoming a hot JavaScript frame. Pair the CPU profile with operation timing or event-loop diagnostics when latency is the real symptom.
 
+### Deno and Bun CPU profiles
+
+Deno and Bun also expose V8 CPU-profile output through `--cpu-prof`. Use these only for the process started by that runtime; they do not replace browser Performance traces for a page.
+
+```bash
+mkdir -p profiles
+
+deno run --cpu-prof --cpu-prof-dir=profiles --cpu-prof-name=deno.cpuprofile your_script.ts
+deno run --cpu-prof --cpu-prof-md --cpu-prof-dir=profiles server.js
+
+bun --cpu-prof --cpu-prof-dir ./profiles --cpu-prof-name bun.cpuprofile script.js
+bun --cpu-prof-md script.js
+```
+
+Load `.cpuprofile` output in Chrome DevTools or another compatible viewer and confirm the intended workload appears in the sample tree. The Markdown profile options (`--cpu-prof-md`) are summaries for review, not substitutes for the raw CPU profile when detailed stack inspection is needed. Do not assume Node-only heap, GC, or inspector examples in this skill apply unchanged to Deno or Bun.
+
 ### Scoped CPU profiling with the built-in inspector
 
 Use `node:inspector` instead of adding `v8-profiler-next`. This captures only the operation between `Profiler.start` and `Profiler.stop`:
