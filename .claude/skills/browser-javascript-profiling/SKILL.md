@@ -2,7 +2,7 @@
 
 Use this skill when the subject is JavaScript running in a browser page: page-load cost, interaction latency, rendering jank, long tasks, layout/paint work, or objects retained by a page. The primary reference is the [Chrome DevTools Performance features reference](https://developer.chrome.com/docs/devtools/performance/reference).
 
-This is **browser-page profiling**, not Node.js process profiling. The existing JavaScript/Node.js skill covers `node --cpu-prof`, `node --heap-prof`, `--trace-gc`, V8 heap APIs, and server-side tools. Do not use those Node flags as a substitute for recording a page: they profile a Node process and its isolate. A Node `.cpuprofile` or `.heapprofile` can be opened in DevTools, but it is not a browser Performance trace and does not include the page's renderer, network, layout, paint, or user interaction. Use the Performance and Memory panels below for a browser page.
+This is **browser-page profiling**, not Node.js process profiling. Node.js flags include `node --cpu-prof`, `node --heap-prof`, `--trace-gc`, V8 heap APIs, and server-side tools. Do not use those Node flags as a substitute for recording a page: they profile a Node process and its isolate. A Node `.cpuprofile` or `.heapprofile` can be opened in DevTools, but it is not a browser Performance trace and does not include the page's renderer, network, layout, paint, or user interaction. Use the Performance and Memory panels below for a browser page.
 
 ## Choose the panel for the question
 
