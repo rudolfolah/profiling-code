@@ -18,6 +18,8 @@ Before opening a tool, ask for (or record):
 
 Prefer a Development/Profiling player on the target hardware over the Editor. Keep the same quality, resolution, refresh rate, renderer, scripting backend, and asset data as the reported scenario. Warm up loading and shaders, then record a short steady-state window and repeat the scenario several times. Clarify whether a reported hitch duration is the total frame time, time over budget, or an added stall. For sustained workloads, compare like-for-like frame-time distributions. For event-triggered hitches, define a fixed event window and report the trigger frame or maximum frame per trial, the individual values, median, and sample count; report a tail percentile only when enough repeated events make it meaningful.
 
+If a project-specific MCP server is available, use it to gather engine context before manual inspection: use the Unity MCP if available for Unity project/editor state, assets, scenes, and profiler setup; use the Godot MCP if available for Godot project/editor state, scenes, scripts, and profiler setup. Treat MCP output as context for choosing and configuring the profiler, not as a replacement for the runtime captures below.
+
 ## Choose the tool
 
 | Question | First tool | What it can establish | Important boundary |
