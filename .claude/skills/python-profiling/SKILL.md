@@ -1,3 +1,8 @@
+---
+name: python-profiling
+description: Profile Python runtime and memory behavior when choosing tools to investigate CPU, latency, allocations, growth, or interpreter events.
+---
+
 # Python Profiling Skill
 
 Use this skill when investigating CPU time, wall-clock latency, Python allocations, process memory, object growth, or interpreter-level events. Choose the narrowest tool that can answer the question instead of running every profiler by default.

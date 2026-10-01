@@ -1,3 +1,8 @@
+---
+name: systems-profiling
+description: Profile native-system CPU, call paths, caches, memory, and scheduling when diagnosing performance or correctness with systems tools.
+---
+
 # Systems Performance Profiling Skill
 
 Use this skill to investigate CPU time, call paths, cache behavior, memory errors, heap growth, and frame or scheduling latency in native programs. It covers the systems tools listed in this repository's root README: **gprof**, **Linux perf**, **Tracy**, **Valgrind Memcheck/Cachegrind/Callgrind/Massif**, and **Apple Instruments**.

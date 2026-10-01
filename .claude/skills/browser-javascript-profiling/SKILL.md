@@ -1,3 +1,8 @@
+---
+name: browser-javascript-profiling
+description: Profile browser JavaScript page loads, interactions, rendering, and memory when diagnosing front-end performance with Chrome DevTools.
+---
+
 # Browser JavaScript Performance Profiling with Chrome DevTools
 
 Use this skill when the subject is JavaScript running in a browser page: page-load cost, interaction latency, rendering jank, long tasks, layout/paint work, or objects retained by a page. The primary reference is the [Chrome DevTools Performance features reference](https://developer.chrome.com/docs/devtools/performance/reference).

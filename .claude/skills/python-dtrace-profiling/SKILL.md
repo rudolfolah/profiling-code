@@ -1,3 +1,8 @@
+---
+name: python-dtrace-profiling
+description: Profile CPython execution events with DTrace when exact function, source-line, and interpreter event ordering on macOS matters.
+---
+
 # Python DTrace Profiling Skill
 
 Use this skill when you need an event-by-event view of CPython execution on macOS: Python function entry/return events, source-line events, and their ordering in a real process.
