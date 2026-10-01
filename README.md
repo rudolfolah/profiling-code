@@ -55,3 +55,37 @@ Shows how to use the profiler and what the output looks like. Includes only tool
   - [A Beginner's Guide to eBPF Programming with Go](https://www.youtube.com/watch?v=uBqRv8bDroc)
   - [eBPF: Fueling New Flame Graphs & more](https://www.youtube.com/watch?v=HKQR7wVapgk)
   - [Kernel Analysis Using eBPF](https://www.youtube.com/watch?v=AZTtTgni7LQ)
+
+# 🤖 Agent Skills
+
+[![skills.sh](https://skills.sh/b/rudolfolah/profiling-code)](https://skills.sh/rudolfolah/profiling-code)
+
+The repository bundles the following agent skills in `.claude/skills/`:
+
+| Skill directory | Purpose | Notable bundled reference files |
+| --- | --- | --- |
+| `browser-javascript-profiling` | Diagnose page-load cost, interaction latency, rendering jank, long tasks, and browser-retained objects with Chrome DevTools. | — |
+| `game-profiling` | Profile Unity and Godot frame hitches, frame rate, allocations, memory, and rendering cost. | — |
+| `gpu-profiling` | Select and use vendor and platform tools for GPU timelines, kernels, graphics captures, and counters. | [`nvidia.md`](.claude/skills/gpu-profiling/nvidia.md), [`amd.md`](.claude/skills/gpu-profiling/amd.md), [`intel.md`](.claude/skills/gpu-profiling/intel.md), [`android.md`](.claude/skills/gpu-profiling/android.md), [`metal.md`](.claude/skills/gpu-profiling/metal.md) |
+| `javascript-profiling` | Profile Node.js CPU use, allocations, retained heap, garbage collection, and event-loop latency. | — |
+| `jvm-profiling` | Investigate JVM CPU, allocation, garbage collection, locks, safepoints, and memory with JFR, JMC, and related tools. | — |
+| `python-cpu-profiling` | Compare and apply Python CPU and runtime profilers for call timing, sampling, and benchmarking. | [`cprofile.md`](.claude/skills/python-cpu-profiling/cprofile.md), [`py-spy.md`](.claude/skills/python-cpu-profiling/py-spy.md), [`pyinstrument.md`](.claude/skills/python-cpu-profiling/pyinstrument.md), [`pyperformance.md`](.claude/skills/python-cpu-profiling/pyperformance.md), [`yappi.md`](.claude/skills/python-cpu-profiling/yappi.md) |
+| `python-dtrace-profiling` | Trace CPython function and source-line events with DTrace on macOS. | — |
+| `python-memory-profiling` | Investigate Python allocations, object retention, heap growth, and process memory. | — |
+| `python-profiling` | Choose an appropriate Python CPU, wall-clock, memory, or interpreter-event profiling workflow. | — |
+| `react-profiling` | Measure React renders, commit duration, re-render frequency, and browser-trace correlations. | — |
+| `systems-profiling` | Profile native programs with gprof, Linux perf, Tracy, Valgrind, and Apple Instruments. | [`gprof.md`](.claude/skills/systems-profiling/gprof.md), [`linux-perf.md`](.claude/skills/systems-profiling/linux-perf.md), [`tracy.md`](.claude/skills/systems-profiling/tracy.md), [`valgrind.md`](.claude/skills/systems-profiling/valgrind.md), [`apple-instruments.md`](.claude/skills/systems-profiling/apple-instruments.md) |
+
+Install the skills from the public GitHub repository with the [skills CLI](https://www.skills.sh/docs):
+
+```bash
+npx skills add rudolfolah/profiling-code
+```
+
+To install only one skill, use the CLI's `--skill` selection option:
+
+```bash
+npx skills add rudolfolah/profiling-code --skill gpu-profiling
+```
+
+The published collection is listed on the [profiling-code skills.sh registry page](https://skills.sh/rudolfolah/profiling-code).
