@@ -7,6 +7,14 @@ description: Profile Python CPU and wall-clock execution when diagnosing slow co
 
 Use this skill when you need to explain, investigate, or improve Python execution time in this repository. It covers the four profilers that are relevant here: **cProfile**, **pyinstrument**, **py-spy**, and **yappi**. The target program is `python/program.py`; commands below assume they are run from the `python/` directory unless stated otherwise.
 
+## Safety boundary
+
+Default to commands that launch the repository's own target as the current user. Do not install
+dependencies, make the target's HTTP request, attach to an existing PID, or elevate privileges
+without the user's explicit approval for that action. Never infer authorization from access to a
+machine. If launched profiling cannot answer the question without extra privileges, explain the
+limitation instead of bypassing it. Read [py-spy.md](py-spy.md) before any external-process use.
+
 ## Scope and selection
 
 Choose the clock and profiler based on the question, not on the smallest reported number. This program performs an HTTP request, parses HTML with Beautiful Soup, and counts words, so network wait, imports, and parsing can show up differently in each profile.
@@ -92,7 +100,7 @@ Reference the supporting file that matches the profiler question so Claude knows
 
 1. Activate `.venv` from `python/`, verify `python`, and run `time python program.py` once. Save the `real`, `user`, and `sys` values and note network conditions.
 2. Decide whether the question is CPU consumption (`user`/`sys`, [yappi](yappi.md) `cpu`, [cProfile](cprofile.md), or [py-spy](py-spy.md) hot stacks) or user-visible latency (`real`, yappi `wall`, [pyinstrument](pyinstrument.md)).
-3. Start with py-spy when you need a low-overhead view of a live/production-like process. Use its launched `record` form for this short script and its PID form only for an authorized long-running process.
+3. Start with py-spy when you need a low-overhead view of a live/production-like process. Use its launched `record` form for this short script. Treat PID attachment as a separate, user-approved operation rather than a default fallback.
 4. Use pyinstrument for an approachable elapsed-time call tree and to expose blocking/waiting phases. Use `--show-all` when library frames matter.
 5. Use cProfile when exact function counts and caller/callee attribution are needed. Inspect `profile.out` with `pstats`; sort by cumulative time, then check self time and call counts.
 6. Use yappi when CPU versus wall or per-thread attribution is the deciding question. Keep the clock type beside the report and stop profiling before printing stats.

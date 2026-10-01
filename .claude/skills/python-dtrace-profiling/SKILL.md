@@ -7,6 +7,15 @@ description: Profile CPython execution events with DTrace when exact function, s
 
 Use this skill when you need an event-by-event view of CPython execution on macOS: Python function entry/return events, source-line events, and their ordering in a real process.
 
+## Privileged-operation boundary
+
+DTrace is an explicitly opt-in advanced workflow. Before running any `sudo dtrace` command, show
+the exact command and obtain the user's approval for that command and target. Trace only the
+repository's user-launched test process; never enumerate or attach to unrelated processes, weaken
+System Integrity Protection, or treat access to the host as authorization. Do not install or
+rebuild Python automatically. If approval or required privileges are absent, provide the
+unprivileged profiler alternative and stop.
+
 DTrace is **instrumentation tracing**, not a replacement name for every Python profiler. It observes CPython's static probes and prints a timestamped text stream. Use `cProfile`/`yappi` for function call timing, `pyinstrument` for sampled call stacks, `tracemalloc`/`memray`/`guppy3` for Python memory behavior, and `psutil` for process resource snapshots. DTrace is useful when the exact sequence and nesting of interpreter events matters.
 
 ## When to use it

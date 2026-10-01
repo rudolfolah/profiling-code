@@ -7,6 +7,14 @@ description: Profile Python runtime and memory behavior when choosing tools to i
 
 Use this skill when investigating CPU time, wall-clock latency, Python allocations, process memory, object growth, or interpreter-level events. Choose the narrowest tool that can answer the question instead of running every profiler by default.
 
+## Safety boundary
+
+Begin with unprivileged profiling of the repository's own test program. Do not install software,
+perform the live HTTP request, inspect another process, or elevate privileges without explicit
+user approval for the specific action. Prefer a local fixture when profiling does not require live
+network behavior. The focused CPU and DTrace skills contain additional boundaries for process
+memory access and privileged tracing; load and follow them before using those capabilities.
+
 ## Repository setup and baseline
 
 The examples target the Python version in `python/.python-version` and use the virtual environment described in `python/README.md`:
