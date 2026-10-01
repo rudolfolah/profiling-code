@@ -14,7 +14,9 @@ This writes an interactive SVG flame graph. The `--` separates py-spy's options 
 py-spy top -- python program.py
 ```
 
-To inspect a process that is already running, first obtain the PID from a process you own and then use:
+Attaching to an existing process crosses a security boundary and can expose application memory.
+Do not discover or select a PID on the user's behalf. If the user explicitly authorizes a named
+process and supplies or confirms its PID, the relevant forms are:
 
 ```bash
 py-spy top --pid <PID>
@@ -37,10 +39,6 @@ Without `--subprocesses`, a parent profile does not automatically explain work d
 
 ## Permission and safety caveats
 
-py-spy reads another interpreter's memory from outside the target process, which is why it has low in-process overhead but also why OS security rules matter. On macOS, attaching commonly requires root; on Linux, attaching to an unrelated PID can require root or ptrace permission. If a PID attach fails with an access/permission error, first prefer the launched form (`py-spy ... -- python program.py`) for a process you own. If the OS still requires elevation, rerun only the specific command with `sudo` and use an explicit path so the intended installed binary is selected, for example:
+py-spy reads another interpreter's memory from outside the target process, which is why it has low in-process overhead but also why OS security rules matter. On macOS, attaching commonly requires root; on Linux, attaching to an unrelated PID can require root or ptrace permission. If a PID attach fails with an access/permission error, use the launched form (`py-spy ... -- python program.py`) for the repository target or stop and report the limitation. This skill does not authorize privilege elevation and must not suggest bypassing an OS or organizational policy.
 
-```bash
-sudo "$(command -v py-spy)" record -o profile.svg -- python program.py
-```
-
-Do not attach to an unrelated process or use `sudo` to bypass a policy without authorization. A root-run target may have different environment, proxy, file permissions, and output ownership, so record that fact with the profile. `--locals` (where supported) can expose application data; avoid it for this target unless the data is safe to disclose.
+Do not attach to an unrelated process. A privileged target can have a different environment, proxy, file permissions, and output ownership. `--locals` (where supported) can expose credentials and application data; do not enable it unless the user explicitly requests it and confirms that the captured data is safe to disclose and retain.

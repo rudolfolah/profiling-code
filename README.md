@@ -4,6 +4,34 @@ Collection of examples and links that uses different profiling tools to show mem
 
 Shows how to use the profiler and what the output looks like. Includes only tools that are maintained.
 
+## Installing the agent skills safely
+
+`npx skills add rudolfolah/profiling-code --all` installs every skill, including the advanced
+Python skills that document process attachment and privileged DTrace workflows. Security scanners
+therefore rate those skills more cautiously than skills that only explain an interactive profiler.
+The rating is a prompt-risk assessment, not a report of a vulnerable npm dependency; review the
+skill content and grant only the capabilities that fit your environment.
+
+Prefer installing only the skills you need rather than using `--all`. To see the current CLI's
+selection syntax, run `npx skills add rudolfolah/profiling-code --help`, then select skills by name.
+The lower-risk starting set is:
+
+- `browser-javascript-profiling`
+- `game-profiling`
+- `gpu-profiling`
+- `javascript-profiling`
+- `jvm-profiling`
+- `python-memory-profiling`
+- `react-profiling`
+- `systems-profiling`
+
+Add `python-cpu-profiling` only when external process sampling is needed, and add
+`python-dtrace-profiling` only on a controlled macOS host where privileged DTrace access is
+acceptable. `python-profiling` is an overview that links to both advanced workflows, so review
+those referenced skills before enabling it. Pin or inspect the repository revision before
+installing, re-run the assessments after updates, and never approve an elevation or process attach
+solely because a skill suggested it.
+
 [awesome-profiling](https://github.com/msaroufim/awesome-profiling): Great list of profiling tools, though includes some tools for Python that are no longer maintained.
 
 # ⚙️ Tools and Techniques for Profiling Code
