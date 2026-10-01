@@ -1,3 +1,8 @@
+---
+name: jvm-profiling
+description: Profile JVM CPU, latency, allocations, garbage collection, heap growth, and contention when Java performance needs measured evidence.
+---
+
 # JVM Profiling with Java Flight Recorder
 
 Use this skill when a Java application's CPU time, latency, allocation rate, garbage collection, heap growth, or thread contention needs evidence rather than guesses. It is deliberately independent of a build system: replace the example application command and output paths with the command used to launch the service.

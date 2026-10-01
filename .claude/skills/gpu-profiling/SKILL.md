@@ -1,3 +1,8 @@
+---
+name: gpu-profiling
+description: Profile graphics and compute GPU timing, throughput, counters, and power when diagnosing device, API, kernel, or frame performance.
+---
+
 # GPU Profiling Tools Skill
 
 Use this skill when the question involves GPU frame time, GPU/CPU overlap, graphics API behavior, kernel throughput, GPU counters, mobile graphics, heterogeneous CPU/GPU execution, or power/thermal effects. Start by identifying the target device, graphics/compute API, and the question being asked; do not select a profiler solely because it is installed.

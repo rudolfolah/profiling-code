@@ -1,3 +1,8 @@
+---
+name: python-memory-profiling
+description: Profile Python allocations, object retention, and process memory when investigating memory growth in the repository's Python example.
+---
+
 # Python memory profiling
 
 Use this skill when Claude needs to explain, reproduce, or investigate memory growth in this repository's Python example. The target is `python/program.py`, a CPython 3.11.5 program that downloads a Wikipedia page, writes a temporary copy, parses it with BeautifulSoup, and counts words. Its network response and import/cache state can vary, so compare runs made with the same interpreter, dependencies, input/network conditions, and workload.

@@ -1,3 +1,8 @@
+---
+name: python-cpu-profiling
+description: Profile Python CPU and wall-clock execution when diagnosing slow code, waits, call paths, or thread-aware runtime behavior.
+---
+
 # Python CPU and Runtime Profiling
 
 Use this skill when you need to explain, investigate, or improve Python execution time in this repository. It covers the four profilers that are relevant here: **cProfile**, **pyinstrument**, **py-spy**, and **yappi**. The target program is `python/program.py`; commands below assume they are run from the `python/` directory unless stated otherwise.
